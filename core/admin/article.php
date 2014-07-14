@@ -152,7 +152,7 @@ if(!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 		exit;
 	}
 	# On parse et alimente nos variables
-	$result = $plxAdmin->parseArticle(PLX_ROOT.$plxAdmin->aConf['racine_articles'].$aFile['0']);
+	$result = $plxAdmin->parseArticle(DOCUMENT_ROOT.$plxAdmin->aConf['racine_articles'].$aFile['0']);
 	$title = trim($result['title']);
 	$chapo = trim($result['chapo']);
 	$content =  trim($result['content']);
@@ -212,7 +212,7 @@ foreach($plxAdmin->aUsers as $_userid => $_user) {
 }
 
 # On récupère les templates des articles
-$files = plxGlob::getInstance(PLX_ROOT.$plxAdmin->aConf['racine_themes'].$plxAdmin->aConf['style']);
+$files = plxGlob::getInstance(DOCUMENT_ROOT.$plxAdmin->aConf['racine_themes'].$plxAdmin->aConf['style']);
 if ($array = $files->query('/^article(-[a-z0-9-_]+)?.php$/')) {
 	foreach($array as $k=>$v)
 		$aTemplates[$v] = $v;

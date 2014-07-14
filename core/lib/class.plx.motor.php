@@ -105,8 +105,8 @@ class plxMotor {
 		# Hook plugins
 		eval($this->plxPlugins->callHook('plxMotorConstructLoadPlugins'));
 		# Traitement sur les répertoires des articles et des commentaires
-		$this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_articles'],false,true,'arts');
-		$this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_commentaires']);
+		$this->plxGlob_arts = plxGlob::getInstance(DOCUMENT_ROOT.$this->aConf['racine_articles'],false,true,'arts');
+		$this->plxGlob_coms = plxGlob::getInstance(DOCUMENT_ROOT.$this->aConf['racine_commentaires']);
 		# Récupération des données dans les autres fichiers xml
 		$this->getCategories(path('XMLFILE_CATEGORIES'));
 		$this->getStatiques(path('XMLFILE_STATICS'));
@@ -503,7 +503,7 @@ class plxMotor {
 				# recuperation du fichier template
 				$this->aStats[$number]['template']=isset($attributes['template'])?$attributes['template']:'static.php';
 				# On verifie que la page statique existe bien
-				$file = PLX_ROOT.$this->aConf['racine_statiques'].$number.'.'.$attributes['url'].'.php';
+				$file = DOCUMENT_ROOT.$this->aConf['racine_statiques'].$number.'.'.$attributes['url'].'.php';
 				# On test si le fichier est lisible
 				$this->aStats[$number]['readable'] = (is_readable($file) ? 1 : 0);
 				# Hook plugins
@@ -608,7 +608,7 @@ class plxMotor {
 		if($aFiles = $this->plxGlob_arts->query($this->motif,'art',$ordre,$start,$this->bypage,$publi)) {
 			# on mémorise le nombre total d'articles trouvés
 			foreach($aFiles as $k=>$v) # On parcourt tous les fichiers
-				$array[$k] = $this->parseArticle(PLX_ROOT.$this->aConf['racine_articles'].$v);
+				$array[$k] = $this->parseArticle(DOCUMENT_ROOT.$this->aConf['racine_articles'].$v);
 			# On stocke les enregistrements dans un objet plxRecord
 			$this->plxRecord_arts = new plxRecord($array);
 			return true;
@@ -775,7 +775,7 @@ class plxMotor {
 		$aFiles = $this->plxGlob_coms->query($motif,'com',$ordre,$start,$limite,$publi);
 		if($aFiles) { # On a des fichiers
 			foreach($aFiles as $k=>$v) # On parcourt tous les fichiers
-				$array[ $k ] = $this->parseCommentaire(PLX_ROOT.$this->aConf['racine_commentaires'].$v);
+				$array[ $k ] = $this->parseCommentaire(DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$v);
 			# On stocke les enregistrements dans un objet plxRecord
 			$this->plxRecord_coms = new plxRecord($array);
 			return true;
@@ -816,7 +816,7 @@ class plxMotor {
 						$comment['filename'] = '_'.$artId.'.'.$time.'-'.$i.'.xml';
 					else # On publie le commentaire directement
 						$comment['filename'] =$artId.'.'.$time.'-'.$i.'.xml';
-				} while(file_exists(PLX_ROOT.$this->aConf['racine_commentaires'].$comment['filename']));
+				} while(file_exists(DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$comment['filename']));
 				# On peut creer le commentaire
 				if($this->addCommentaire($comment)) { # Commentaire OK
 					if($this->aConf['mod_com']) # En cours de moderation
@@ -857,7 +857,7 @@ class plxMotor {
 		eval($this->plxPlugins->callHook('plxMotorAddCommentaireXml'));
 		$xml .= "</comment>\n";
 		# On ecrit ce contenu dans notre fichier XML
-		return plxUtils::write($xml, PLX_ROOT.$this->aConf['racine_commentaires'].$content['filename']);
+		return plxUtils::write($xml, DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$content['filename']);
 	}
 
 	/**
@@ -908,11 +908,11 @@ class plxMotor {
 	public function sendTelechargement($cible) {
 
 		# On décrypte le nom du fichier
-		$file = PLX_ROOT.$this->aConf['documents'].plxEncrypt::decryptId($cible);
+		$file = DOCUMENT_ROOT.$this->aConf['documents'].plxEncrypt::decryptId($cible);
 		# Hook plugins
 		if(eval($this->plxPlugins->callHook('plxMotorSendDownload'))) return;
 		# On lance le téléchargement et on check le répertoire documents
-		if(file_exists($file) AND preg_match('#^'.str_replace('\\', '/', realpath(PLX_ROOT.$this->aConf['documents']).'#'), str_replace('\\', '/', realpath($file)))) {
+		if(file_exists($file) AND preg_match('#^'.str_replace('\\', '/', realpath(DOCUMENT_ROOT.$this->aConf['documents']).'#'), str_replace('\\', '/', realpath($file)))) {
 			header('Content-Description: File Transfer');
 			header('Content-Type: application/download');
 			header('Content-Disposition: attachment; filename='.basename($file));

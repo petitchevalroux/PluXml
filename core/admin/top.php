@@ -86,7 +86,7 @@
 
 		# récuperation des menus admin pour les plugins
 		foreach($plxAdmin->plxPlugins->aPlugins as $plugName => $plugInstance) {
-			if($plugInstance AND is_file(PLX_PLUGINS.$plugName.'/admin.php')) {
+			if($plugInstance AND is_file(PLUGINS_ROOT.$plugName.'/admin.php')) {
 				if($plxAdmin->checkProfil($plugInstance->getAdminProfil(),false)) {
 					if($plugInstance->adminMenu) {
 						$menu = plxUtils::formatMenu(plxUtils::strCheck($plugInstance->adminMenu['title']), 'plugin.php?p='.$plugName, plxUtils::strCheck($plugInstance->adminMenu['caption']));

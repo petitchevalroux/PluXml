@@ -37,11 +37,11 @@ function pluginsList($plugins, $defaultLang, $type) {
 		foreach($plugins as $plugName => $plugInstance) {
 			$ordre = ++$num;
 			# détermination de l'icone à afficher
-			if(is_file(PLX_PLUGINS.$plugName.'/icon.png'))
+			if(is_file(PLUGINS_ROOT.$plugName.'/icon.png'))
 				$icon=PLX_PLUGINS.$plugName.'/icon.png';
-			elseif(is_file(PLX_PLUGINS.$plugName.'/icon.jpg'))
-				$icon=PLX_PLUGINS.$plugName.'/icon.jpg';
-			elseif(is_file(PLX_PLUGINS.$plugName.'/icon.gif'))
+			elseif(is_file(PLUGINS_ROOT.$plugName.'/icon.jpg'))
+				$icon=PLUGINS_ROOT.$plugName.'/icon.jpg';
+			elseif(is_file(PLUGINS_ROOT.$plugName.'/icon.gif'))
 				$icon=PLX_PLUGINS.$plugName.'/icon.gif';
 			else
 			$icon=PLX_CORE.'admin/theme/images/icon_plugin.png';
@@ -69,7 +69,7 @@ function pluginsList($plugins, $defaultLang, $type) {
 					# site
 					if($plugInstance->getInfo('site')!='') $output .= ' - <a href="'.plxUtils::strCheck($plugInstance->getInfo('site')).'">'.plxUtils::strCheck($plugInstance->getInfo('site')).'</a>';
 					# message d'alerte si plugin non configuré
-					if($type AND file_exists(PLX_PLUGINS.$plugName.'/config.php') AND !file_exists(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml')) $output .= '<br /><span class="alert">'.L_PLUGIN_NO_CONFIG.'</span>';
+					if($type AND file_exists(PLX_PLUGINS.$plugName.'/config.php') AND !file_exists(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml')) $output .= '<br /><span class="alert">'.L_PLUGIN_NO_CONFIG.'</span>';
 				$output .= '</td>';
 
 				# colonne pour trier les plugins
@@ -82,13 +82,13 @@ function pluginsList($plugins, $defaultLang, $type) {
 				# affichage des liens du plugin
 				$output .= '<td class="right">';
 					# lien configuration
-					if(is_file(PLX_PLUGINS.$plugName.'/config.php')) {
+					if(is_file(PLUGINS_ROOT.$plugName.'/config.php')) {
 						$output .= '<a title="'.L_PLUGINS_CONFIG_TITLE.'" href="parametres_plugin.php?p='.urlencode($plugName).'">'.L_PLUGINS_CONFIG.'</a><br />';
 					}
 					# lien pour code css
 					$output .= '<a title="'.L_PLUGINS_CSS_TITLE.'" href="parametres_plugincss.php?p='.urlencode($plugName).'">'.L_PLUGINS_CSS.'</a><br />';
 					# lien aide
-					if(is_file(PLX_PLUGINS.$plugName.'/lang/'.$defaultLang.'-help.php'))
+					if(is_file(PLUGINS_ROOT.$plugName.'/lang/'.$defaultLang.'-help.php'))
 						$output .= '<a title="'.L_PLUGINS_HELP_TITLE.'" href="parametres_pluginhelp.php?p='.urlencode($plugName).'">'.L_PLUGINS_HELP.'</a>';
 				$output .= '</td>';
 			$output .= '</tr>';
