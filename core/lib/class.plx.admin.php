@@ -892,10 +892,11 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 	 *
 	 * @param	content	données du commentaire à mettre à jour
 	 * @param	id	identifiant du commentaire
+	 * @param	editorIsAdmin true si l'éditeur du commentaire est admin
 	 * @return	string
 	 * @author	Stephane F. et Florent MONTHEL
 	 **/
-	public function editCommentaire($content, &$id) {
+	public function editCommentaire($content, &$id, $editorIsAdmin) {
 
 		# Vérification de la validité de la date de publication
 		if(!plxDate::checkDate($content['day'],$content['month'],$content['year'],$content['time']))
@@ -916,7 +917,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		# Formatage des données
 		$comment['author'] = plxUtils::strCheck(trim($content['author']));
 		$comment['site'] = plxUtils::strCheck(trim($content['site']));
-		if($com['type'] != 'admin')
+		if($editorIsAdmin === false)
 			$comment['content'] = plxUtils::strCheck(trim($content['content']));
 		else
 			$comment['content'] = strip_tags(trim($content['content']),'<a>,<strong>');

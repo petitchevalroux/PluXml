@@ -49,14 +49,14 @@ if(!empty($_POST) AND !empty($_POST['comId'])) {
 	}
 	# Commentaire en ligne
 	if(isset($_POST['online'])) {
-		$plxAdmin->editCommentaire($_POST,$_POST['comId']);
+		$plxAdmin->editCommentaire($_POST,$_POST['comId'], true);
 		$plxAdmin->modCommentaire($_POST['comId'],'online');
 		header('Location: comment.php?c='.$_POST['comId'].(!empty($_GET['a'])?'&a='.$_GET['a']:''));
 		exit;
 	}
 	# Commentaire hors-ligne
 	if(isset($_POST['offline'])) {
-		$plxAdmin->editCommentaire($_POST,$_POST['comId']);
+		$plxAdmin->editCommentaire($_POST,$_POST['comId'], true);
 		$plxAdmin->modCommentaire($_POST['comId'],'offline');
 		header('Location: comment.php?c='.$_POST['comId'].(!empty($_GET['a'])?'&a='.$_GET['a']:''));
 		exit;
@@ -67,7 +67,7 @@ if(!empty($_POST) AND !empty($_POST['comId'])) {
 		exit;
 	}
 	# Edition
-	$plxAdmin->editCommentaire($_POST,$_POST['comId']);
+	$plxAdmin->editCommentaire($_POST,$_POST['comId'], true);
 	header('Location: comment.php?c='.$_POST['comId'].(!empty($_GET['a'])?'&a='.$_GET['a']:''));
 	exit;
 }
