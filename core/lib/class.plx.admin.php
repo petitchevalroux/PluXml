@@ -574,7 +574,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		# suppression
 		if(!empty($content['selection']) AND $content['selection']=='delete' AND isset($content['idStatic'])) {
 			foreach($content['idStatic'] as $static_id) {
-				$filename = PLX_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$this->aStats[$static_id]['url'].'.php';
+				$filename = DOCUMENT_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$this->aStats[$static_id]['url'].'.php';
 				if(is_file($filename)) unlink($filename);
 				# si la page statique supprimée est la page d'accueil on met à jour le parametre
 				if($static_id==$this->aConf['homestatic']) {
@@ -595,8 +595,8 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 					if($stat_url=='') $stat_url = L_DEFAULT_NEW_STATIC_URL;
 					# On vérifie si on a besoin de renommer le fichier de la page statique
 					if(isset($this->aStats[$static_id]) AND $this->aStats[$static_id]['url']!=$stat_url) {
-						$oldfilename = PLX_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$this->aStats[$static_id]['url'].'.php';
-						$newfilename = PLX_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$stat_url.'.php';
+						$oldfilename = DOCUMENT_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$this->aStats[$static_id]['url'].'.php';
+						$newfilename = DOCUMENT_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$stat_url.'.php';
 						if(is_file($oldfilename)) rename($oldfilename, $newfilename);
 					}
 					$this->aStats[$static_id]['group'] = trim($content[$static_id.'_group']);
@@ -671,7 +671,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 	public function getFileStatique($num) {
 
 		# Emplacement de la page
-		$filename = PLX_ROOT.$this->aConf['racine_statiques'].$num.'.'.$this->aStats[ $num ]['url'].'.php';
+		$filename = DOCUMENT_ROOT.$this->aConf['racine_statiques'].$num.'.'.$this->aStats[ $num ]['url'].'.php';
 		if(file_exists($filename) AND filesize($filename) > 0) {
 			if($f = fopen($filename, 'r')) {
 				$content = fread($f, filesize($filename));
@@ -701,7 +701,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		eval($this->plxPlugins->callHook('plxAdminEditStatique'));
 		if($this->editStatiques(null,true)) {
 			# Génération du nom du fichier de la page statique
-			$filename = PLX_ROOT.$this->aConf['racine_statiques'].$content['id'].'.'.$this->aStats[ $content['id'] ]['url'].'.php';
+			$filename = DOCUMENT_ROOT.$this->aConf['racine_statiques'].$content['id'].'.'.$this->aStats[ $content['id'] ]['url'].'.php';
 			# On écrit le fichier
 			if(plxUtils::write($content['content'],$filename))
 				return plxMsg::Info(L_SAVE_SUCCESSFUL);
@@ -790,12 +790,12 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		$time = $content['year'].$content['month'].$content['day'].substr(str_replace(':','',$content['time']),0,4);
 		if(!preg_match('/^[0-9]{12}$/',$time)) $time = date('YmdHi'); # Check de la date au cas ou...
 		if(empty($content['catId'])) $content['catId']=array('000'); # Catégorie non classée
-		$filename = PLX_ROOT.$this->aConf['racine_articles'].$id.'.'.implode(',', $content['catId']).'.'.trim($content['author']).'.'.$time.'.'.$content['url'].'.xml';
+		$filename = DOCUMENT_ROOT.$this->aConf['racine_articles'].$id.'.'.implode(',', $content['catId']).'.'.trim($content['author']).'.'.$time.'.'.$content['url'].'.xml';
 		# On va mettre à jour notre fichier
 		if(plxUtils::write($xml,$filename)) {
 			# suppression ancien fichier si nécessaire
 			if($oldArt) {
-				$oldfilename = PLX_ROOT.$this->aConf['racine_articles'].$oldArt['0'];
+				$oldfilename = DOCUMENT_ROOT.$this->aConf['racine_articles'].$oldArt['0'];
 				if($oldfilename!=$filename AND file_exists($oldfilename))
 					unlink($oldfilename);
 			}
@@ -827,15 +827,15 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		$resDelArt = $resDelCom = true;
 		# Suppression de l'article
 		if($globArt = $this->plxGlob_arts->query('/^'.$id.'.(.*).xml$/')) {
-			unlink(PLX_ROOT.$this->aConf['racine_articles'].$globArt['0']);
-			$resDelArt = !file_exists(PLX_ROOT.$this->aConf['racine_articles'].$globArt['0']);
+			unlink(DOCUMENT_ROOT.$this->aConf['racine_articles'].$globArt['0']);
+			$resDelArt = !file_exists(DOCUMENT_ROOT.$this->aConf['racine_articles'].$globArt['0']);
 		}
 		# Suppression des commentaires
 		if($globComs = $this->plxGlob_coms->query('/^_?'.str_replace('_','',$id).'.(.*).xml$/')) {
 			$nb_coms=sizeof($globComs);
 			for($i=0; $i<$nb_coms; $i++) {
-				unlink(PLX_ROOT.$this->aConf['racine_commentaires'].$globComs[$i]);
-				$resDelCom = (!file_exists(PLX_ROOT.$this->aConf['racine_commentaires'].$globComs[$i]) AND $resDelCom);
+				unlink(DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$globComs[$i]);
+				$resDelCom = (!file_exists(DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$globComs[$i]) AND $resDelCom);
 			}
 		}
 
@@ -904,7 +904,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		$comment=array();
 		# Génération du nom du fichier
 		$comment['filename'] = $id.'.xml';
-		if(!file_exists(PLX_ROOT.$this->aConf['racine_commentaires'].$comment['filename'])) # Commentaire inexistant
+		if(!file_exists(DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$comment['filename'])) # Commentaire inexistant
 			return plxMsg::Error(L_ERR_UNKNOWN_COMMENT);
 		# Controle des saisies
 		if(trim($content['mail'])!='' AND !plxUtils::checkMail(trim($content['mail'])))
@@ -912,7 +912,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		if(trim($content['site'])!='' AND !plxUtils::checkSite($content['site']))
 			return plxMsg::Error(L_ERR_INVALID_SITE);
 		# On récupère les infos du commentaire
-		$com = $this->parseCommentaire(PLX_ROOT.$this->aConf['racine_commentaires'].$comment['filename']);
+		$com = $this->parseCommentaire(DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$comment['filename']);
 		# Formatage des données
 		$comment['author'] = plxUtils::strCheck(trim($content['author']));
 		$comment['site'] = plxUtils::strCheck(trim($content['site']));
@@ -950,7 +950,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 	public function delCommentaire($id) {
 
 		# Génération du nom du fichier
-		$filename = PLX_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
+		$filename = DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
 		# Suppression du commentaire
 		if(file_exists($filename)) {
 			unlink($filename);
@@ -973,7 +973,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 	public function modCommentaire(&$id, $mod) {
 
 		# Génération du nom du fichier
-		$oldfilename = PLX_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
+		$oldfilename = DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
 		if(!file_exists($oldfilename)) # Commentaire inexistant
 			return plxMsg::Error(L_ERR_UNKNOWN_COMMENT);
 		# Modérer ou valider ?
@@ -983,7 +983,7 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 		if($mod=='offline')
 			$id = '_'.$id;
 		# Génération du nouveau nom de fichier
-		$newfilename = PLX_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
+		$newfilename = DOCUMENT_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
 		# On renomme le fichier
 		@rename($oldfilename,$newfilename);
 		# Contrôle

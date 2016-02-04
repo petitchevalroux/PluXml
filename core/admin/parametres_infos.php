@@ -24,10 +24,10 @@ include(dirname(__FILE__).'/top.php');
 		<li><strong><?php echo L_PLUXML_VERSION; ?> <?php echo $plxAdmin->version; ?> (<?php echo L_INFO_CHARSET ?> <?php echo PLX_CHARSET ?>)</strong></li>
 		<li><?php echo L_INFO_PHP_VERSION; ?> : <?php echo phpversion(); ?></li>
 		<li><?php echo L_INFO_MAGIC_QUOTES; ?> : <?php echo get_magic_quotes_gpc(); ?></li>
-		<?php plxUtils::testWrite(PLX_ROOT.PLX_CONFIG_PATH); ?>
-		<?php plxUtils::testWrite(PLX_ROOT.$plxAdmin->aConf['racine_articles']); ?>
-		<?php plxUtils::testWrite(PLX_ROOT.$plxAdmin->aConf['racine_commentaires']); ?>
-		<?php plxUtils::testWrite(PLX_ROOT.$plxAdmin->aConf['racine_statiques']); ?>
+		<?php plxUtils::testWrite(DOCUMENT_ROOT.PLX_CONFIG_PATH); ?>
+		<?php plxUtils::testWrite(DOCUMENT_ROOT.$plxAdmin->aConf['racine_articles']); ?>
+		<?php plxUtils::testWrite(DOCUMENT_ROOT.$plxAdmin->aConf['racine_commentaires']); ?>
+		<?php plxUtils::testWrite(DOCUMENT_ROOT.$plxAdmin->aConf['racine_statiques']); ?>
 		<?php plxUtils::testWrite(PLX_ROOT.$plxAdmin->aConf['images']); ?>
 		<?php plxUtils::testWrite(PLX_ROOT.$plxAdmin->aConf['documents']); ?>
 		<?php plxUtils::testModReWrite() ?>

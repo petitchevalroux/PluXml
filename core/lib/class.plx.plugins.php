@@ -31,7 +31,7 @@ class plxPlugins {
 	 * @author	Stephane F
 	 **/
 	public function getInstance($plugName) {
-		$filename = PLX_PLUGINS.$plugName.'/'.$plugName.'.php';
+		$filename = PLUGINS_ROOT.$plugName.'/'.$plugName.'.php';
 		if(is_file($filename)) {
 			include_once($filename);
 			if (class_exists($plugName)) {
@@ -114,7 +114,7 @@ class plxPlugins {
 	public function getInactivePlugins() {
 
 		$aPlugins = array();
-		$dirs = plxGlob::getInstance(PLX_PLUGINS, true);
+		$dirs = plxGlob::getInstance(PLUGINS_ROOT, true);
 		if(sizeof($dirs->aFiles)>0) {
 			foreach($dirs->aFiles as $plugName) {
 				if(!isset($this->aPlugins[$plugName]) AND $plugInstance=$this->getInstance($plugName)) {
@@ -159,16 +159,16 @@ class plxPlugins {
 		# suppression des plugins
 		elseif(isset($content['selection']) AND $content['selection']=='delete') {
 			foreach($content['chkAction'] as $idx => $plugName) {
-				if($this->deleteDir(realpath(PLX_PLUGINS.$plugName))) {
+				if($this->deleteDir(realpath(PLUGINS_ROOT.$plugName))) {
 					# suppression fichier de config du plugin
-					if(is_file(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml'))
-						unlink(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml');
+					if(is_file(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml'))
+						unlink(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml');
 					# suppression fichier site.css du plugin
-					if(is_file(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.site.css'))
-						unlink(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.site.css');
+					if(is_file(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.site.css'))
+						unlink(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.site.css');
 					# suppression fichier admin.css du plugin
-					if(is_file(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.admin.css'))
-						unlink(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.admin.css');
+					if(is_file(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.admin.css'))
+						unlink(DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.admin.css');
 					unset($this->aPlugins[$plugName]);
 				}
 			}
@@ -236,11 +236,11 @@ class plxPlugins {
 	public function cssCache($type) {
 		$cache = '';
 		foreach($this->aPlugins as $plugName => $plugInstance) {
-			$filename = PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.'.$type.'.css';
+			$filename = DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.'.$type.'.css';
 			if(is_file($filename)) {
 				$cache .= trim(file_get_contents($filename));
 			} else {
-				$filename = PLX_PLUGINS.$plugName.'/css/'.$type.'.css';
+				$filename = PLUGINS_ROOT.$plugName.'/css/'.$type.'.css';
 				if(is_file($filename)) {
 					$cache .= trim(file_get_contents($filename));
 				}
@@ -286,13 +286,13 @@ class plxPlugin {
 		$this->default_lang = $default_lang;
 		$plugName= get_class($this);
 		$this->plug = array(
-			'dir' 			=> PLX_PLUGINS,
+			'dir' 			=> PLUGINS_ROOT,
 			'name' 			=> $plugName,
-			'filename'		=> PLX_PLUGINS.$plugName.'/'.$plugName.'.php',
-			'parameters.xml'=> PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml',
-			'infos.xml'		=> PLX_PLUGINS.$plugName.'/infos.xml'
+			'filename'		=> PLUGINS_ROOT.$plugName.'/'.$plugName.'.php',
+			'parameters.xml'=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml',
+			'infos.xml'		=> PLUGINS_ROOT.$plugName.'/infos.xml'
 		);
-		$this->aLang = $this->loadLang(PLX_PLUGINS.$plugName.'/lang/'.$this->default_lang.'.php');
+		$this->aLang = $this->loadLang(PLUGINS_ROOT.$plugName.'/lang/'.$this->default_lang.'.php');
 		$this->loadParams();
 		if(defined('PLX_ADMIN'))
 			$this->getInfos();

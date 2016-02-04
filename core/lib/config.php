@@ -1,7 +1,7 @@
 <?php
 
 # Gestion des erreurs PHP
-//error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
 # Fonction qui retourne le timestamp UNIX actuel avec les microsecondes
 function getMicrotime() {
@@ -12,13 +12,21 @@ function getMicrotime() {
 # Initialisation du timer d'execution
 define('PLX_MICROTIME', getMicrotime());
 
+/**
+ * Pat : Deux constantes pour définir les chemins de bases
+ * DOCUMENT_ROOT remplace beaucoup de PLX_ROOT
+ * PLUGINS_ROOT remplace beaucoup de PLX_PLUGINS
+ */
+define('DOCUMENT_ROOT', isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '');
+define('PLUGINS_ROOT', DOCUMENT_ROOT . 'plugins/');
+
 $CONSTS = array(
-	'XMLFILE_PARAMETERS' 	=> PLX_ROOT.PLX_CONFIG_PATH.'parametres.xml',
-	'XMLFILE_CATEGORIES' 	=> PLX_ROOT.PLX_CONFIG_PATH.'categories.xml',
-	'XMLFILE_STATICS' 		=> PLX_ROOT.PLX_CONFIG_PATH.'statiques.xml',
-	'XMLFILE_USERS' 		=> PLX_ROOT.PLX_CONFIG_PATH.'users.xml',
-	'XMLFILE_PLUGINS' 		=> PLX_ROOT.PLX_CONFIG_PATH.'plugins.xml',
-	'XMLFILE_TAGS' 			=> PLX_ROOT.PLX_CONFIG_PATH.'tags.xml',
+	'XMLFILE_PARAMETERS' 	=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'parametres.xml',
+	'XMLFILE_CATEGORIES' 	=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'categories.xml',
+	'XMLFILE_STATICS' 		=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'statiques.xml',
+	'XMLFILE_USERS' 		=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'users.xml',
+	'XMLFILE_PLUGINS' 		=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'plugins.xml',
+	'XMLFILE_TAGS' 			=> DOCUMENT_ROOT.PLX_CONFIG_PATH.'tags.xml',
 );
 
 # Définition de l'encodage => PLX_CHARSET : UTF-8 (conseillé) ou ISO-8859-1
